@@ -21,6 +21,7 @@ import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.ChatColor;
 import cc.hyperium.utils.JsonHolder;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +41,11 @@ public class TextItem extends DisplayItem {
     }
 
 
-    public void draw(int x, double y, boolean isConfig) {
+    public void draw(int x, double y, boolean isConfig, MatrixStack matrixStack) {
         List<String> list = new ArrayList<>();
         if (text.isEmpty()) list.add("Text is empty??");
         else list.add(text);
-        ElementRenderer.draw(x, y, ChatColor.translateAlternateColorCodes('%', text));
+        ElementRenderer.draw(x, y, ChatColor.translateAlternateColorCodes('%', text), matrixStack);
         width = ElementRenderer.maxWidth(list);
     }
 

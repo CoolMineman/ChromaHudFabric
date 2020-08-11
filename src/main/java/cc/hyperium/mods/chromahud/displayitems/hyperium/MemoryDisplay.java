@@ -22,6 +22,7 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class MemoryDisplay extends DisplayItem {
 
@@ -30,16 +31,16 @@ public class MemoryDisplay extends DisplayItem {
     }
 
     @Override
-    public void draw(int x, double y, boolean config) {
+    public void draw(int x, double y, boolean config, MatrixStack matrixStack) {
         int mbDiv = 1048576;
         long maxMemory = Runtime.getRuntime().maxMemory() / mbDiv;
         long totalMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / mbDiv;
 
         String displayString = totalMemory + " / " + (maxMemory == Long.MAX_VALUE ? "No limit" : maxMemory) + "MB";
-        ElementRenderer.draw(x, y, displayString);
+        ElementRenderer.draw(x, y, displayString, matrixStack);
         TextRenderer fr = MinecraftClient.getInstance().textRenderer;
 
         height = fr.fontHeight * ElementRenderer.getCurrentScale();
-        width = fr.getStringWidth(displayString) * ElementRenderer.getCurrentScale();
+        width = fr.getWidth(displayString) * ElementRenderer.getCurrentScale();
     }
 }

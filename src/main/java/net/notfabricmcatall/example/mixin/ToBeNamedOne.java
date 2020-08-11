@@ -11,13 +11,14 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import net.notfabricmcatall.example.ExampleMod;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.util.math.MatrixStack;
 
 @Mixin(InGameHud.class)
 public class ToBeNamedOne {
     @Inject(method = "render", at = @At(value = "TAIL"))
-    public void render(CallbackInfo ci) {
+    public void render(MatrixStack matrixStack, float f, CallbackInfo ci) {
         NextTickDisplayer.tick();
-        ExampleMod.elementrenderer.onRenderTick();
+        ExampleMod.elementrenderer.onRenderTick(matrixStack);
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))

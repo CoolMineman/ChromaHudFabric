@@ -22,6 +22,7 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class DoubleCPSDisplay extends DisplayItem {
     }
 
     @Override
-    public void draw(int x, double y, boolean config) {
+    public void draw(int x, double y, boolean config, MatrixStack matrixStack) {
         if (fr == null) {
             fr = MinecraftClient.getInstance().textRenderer;
         }
@@ -48,8 +49,8 @@ public class DoubleCPSDisplay extends DisplayItem {
             list.add("Right CPS: " + rightCps);
             list.add("Total CPS: " + (leftCps + rightCps));
             height = fr.fontHeight * (list.size());
-            width = list.stream().mapToInt(fr::getStringWidth).filter(line -> line >= 0).max().orElse(0);
-            ElementRenderer.draw(x, y, list);
+            width = list.stream().mapToInt(fr::getWidth).filter(line -> line >= 0).max().orElse(0);
+            ElementRenderer.draw(x, y, list, matrixStack);
         } catch (Exception e) {
             e.printStackTrace();
         }

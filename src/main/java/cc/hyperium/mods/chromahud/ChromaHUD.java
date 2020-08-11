@@ -31,6 +31,8 @@ import com.google.gson.JsonArray;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.gui.widget.ButtonWidget.PressAction;
+import net.minecraft.text.LiteralText;
 
 import java.io.*;
 import java.util.List;
@@ -131,9 +133,9 @@ public class ChromaHUD extends AbstractMod {
         ChromaHUDApi.getInstance().registerButtonConfig("COORDS", new ButtonConfig((guiButton, displayItem) -> {
             CordsDisplay displayItem1 = (CordsDisplay) displayItem;
             displayItem1.state = displayItem1.state == 1 ? 0 : 1;
-            guiButton.message = ChatColor.RED.toString() + "Make " + (((CordsDisplay) displayItem).state == 1 ? "Horizontal" : "Vertical");
-        }, new ButtonWidget(0, 0, 0, "Coords State"), (guiButton, displayItem) -> guiButton.message = ChatColor.RED.toString() + "Make "
-            + (((CordsDisplay) displayItem).state == 1 ? "Horizontal" : "Vertical")));
+            guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Make " + (((CordsDisplay) displayItem).state == 1 ? "Horizontal" : "Vertical")));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Coords State"), new DummyPressAction()), (guiButton, displayItem) -> guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Make "
+            + (((CordsDisplay) displayItem).state == 1 ? "Horizontal" : "Vertical")))));
         ChromaHUDApi.getInstance().registerButtonConfig("COORDS", new ButtonConfig((guiButton, displayItem) -> {
             CordsDisplay displayItem1 = (CordsDisplay) displayItem;
             displayItem1.precision += 1;
@@ -142,45 +144,45 @@ public class ChromaHUD extends AbstractMod {
             int next = displayItem1.precision + 1;
             if (next > 4)
                 next = 0;
-            guiButton.message = ChatColor.RED.toString() + "Change to " + next + " decimal" + (next != 1 ? "s" : "");
-        }, new ButtonWidget(0, 0, 0, "Coords Precision"), (guiButton, displayItem) -> {
+            guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Change to " + next + " decimal" + (next != 1 ? "s" : "")));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Coords Precision"), new DummyPressAction()), (guiButton, displayItem) -> {
             int next = ((CordsDisplay) displayItem).precision + 1;
             if (next > 4)
                 next = 0;
-            guiButton.message = ChatColor.RED.toString() + "Change to " + next + " decimal" + (next != 1 ? "s" : "");
+            guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Change to " + next + " decimal" + (next != 1 ? "s" : "")));
         }));
 
         ChromaHUDApi.getInstance().registerButtonConfig("POTION", new ButtonConfig((guiButton, displayItem) -> {
             PotionEffects potionEffects = (PotionEffects) displayItem;
             potionEffects.togglePotionIcon();
-            guiButton.message = ChatColor.RED + "Toggle Potion Icon";
-        }, new ButtonWidget(0, 0, 0, "Potion Icons"), (guiButton, displayItem) -> guiButton.message = ChatColor.RED.toString() + "Toggle Potion Icon"));
+            guiButton.setMessage(new LiteralText(ChatColor.RED + "Toggle Potion Icon"));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Potion Icons"), new DummyPressAction()), (guiButton, displayItem) -> guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Potion Icon"))));
 
         ChromaHUDApi.getInstance().registerButtonConfig("DIRECTION", new ButtonConfig((guiButton, displayItem) -> {
             DirectionHUD directionHUD = (DirectionHUD) displayItem;
             directionHUD.toggleShortDirection();
-            guiButton.message = ChatColor.RED + "Toggle Short Direction";
-        }, new ButtonWidget(0, 0, 0, "Short Directions"), ((guiButton, displayItem) -> guiButton.message = ChatColor.RED + "Toggle Short Direction")));
+            guiButton.setMessage(new LiteralText(ChatColor.RED + "Toggle Short Direction"));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Short Directions"), new DummyPressAction()), ((guiButton, displayItem) -> guiButton.setMessage(new LiteralText(ChatColor.RED + "Toggle Short Direction")))));
 
         ChromaHUDApi.getInstance().registerButtonConfig("ARMOUR_HUD", new ButtonConfig((guiButton, displayItem) -> {
             ArmourHud item = (ArmourHud) displayItem;
             item.toggleDurability();
-            guiButton.message = ChatColor.RED.toString() + "Toggle Durability";
-        }, new ButtonWidget(0, 0, 0, "Armour Hud Durability"), (guiButton, displayItem) -> guiButton.message = ChatColor.RED.toString() + "Toggle Durability"));
+            guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Durability"));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Armour Hud Durability"), new DummyPressAction()), (guiButton, displayItem) -> guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Durability"))));
 
         ChromaHUDApi.getInstance().registerButtonConfig("ARMOUR_HUD", new ButtonConfig((guiButton, displayItem) -> {
             ArmourHud item = (ArmourHud) displayItem;
             item.toggleHand();
-            guiButton.message = ChatColor.RED.toString() + "Toggle Held Item";
-        }, new ButtonWidget(0, 0, 0, "Armour Hud Hand"), (guiButton, displayItem) -> guiButton.message = ChatColor.RED.toString() + "Toggle Held Item"));
+            guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Held Item"));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Armour Hud Hand"), new DummyPressAction()), (guiButton, displayItem) -> guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Held Item"))));
 
         ChromaHUDApi.getInstance().registerButtonConfig("ARMOUR_HUD", new ButtonConfig((guiButton, displayItem) -> {
             ArmourHud item = (ArmourHud) displayItem;
             item.setArmourOnTop(!item.isArmourOnTop());
-            guiButton.message = ChatColor.RED.toString() + "Toggle Armour On Top";
-        }, new ButtonWidget(0, 0, 0, "Armour Hud Hand"), (guiButton, displayItem) -> guiButton.message = ChatColor.RED.toString() + "Toggle Armour On Top"));
+            guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Armour On Top"));
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Armour Hud Hand"), new DummyPressAction()), (guiButton, displayItem) -> guiButton.setMessage(new LiteralText(ChatColor.RED.toString() + "Toggle Armour On Top"))));
 
-        TextFieldWidget textTextField = new TextFieldWidget(1, MinecraftClient.getInstance().textRenderer, 0, 0, 200, 20);
+        TextFieldWidget textTextField = new TextFieldWidget(MinecraftClient.getInstance().textRenderer, 0, 0, 200, 20, new LiteralText(""));
         ChromaHUDApi.getInstance().registerTextConfig("TEXT", new TextConfig((guiTextField, displayItem) -> ((TextItem) displayItem).setText(guiTextField.getText()),
             textTextField, (guiTextField, displayItem) -> guiTextField.setText(((TextItem) displayItem).getText())));
 
@@ -196,7 +198,7 @@ public class ChromaHUD extends AbstractMod {
             "For more options, Google \"Date Format\""));
 
         ChromaHUDApi.getInstance().registerButtonConfig("SCOREBOARD", new ButtonConfig((guiButton, displayItem) -> displayItem.getData().put("numbers",
-            !displayItem.getData().optBoolean("numbers")), new ButtonWidget(0, 0, 0, "Toggle Number"), (guiButton, displayItem) -> {
+            !displayItem.getData().optBoolean("numbers")), new ButtonWidget(0, 0, 200, 20, new LiteralText("Toggle Number"), new DummyPressAction()), (guiButton, displayItem) -> {
         }));
 
         ChromaHUDApi.getInstance().registerButtonConfig("COINS", new ButtonConfig((guiButton, displayItem) -> {
@@ -208,13 +210,22 @@ public class ChromaHUD extends AbstractMod {
             }
             data.put("state", state);
 
-        }, new ButtonWidget(0, 0, 0, "Toggle Number"), (guiButton, displayItem) -> {
+        }, new ButtonWidget(0, 0, 200, 20, new LiteralText("Toggle Number"), new DummyPressAction()), (guiButton, displayItem) -> {
             JsonHolder data = displayItem.getData();
             int state = data.optInt("state");
             if (state < 0 || state > 2) state = 0;
-            if (state == 0) guiButton.message = "Daily Coins";
-            if (state == 1) guiButton.message = "Monthly Coins";
-            if (state == 2) guiButton.message = "Lifetime Coins";
+            if (state == 0) guiButton.setMessage(new LiteralText("Daily Coins"));
+            if (state == 1) guiButton.setMessage(new LiteralText("Monthly Coins"));
+            if (state == 2)guiButton.setMessage(new LiteralText("Lifetime Coins"));
         }));
+    }
+
+    public static final class DummyPressAction implements PressAction {
+
+        @Override
+        public void onPress(ButtonWidget button) {
+            // Dummy
+        }
+
     }
 }

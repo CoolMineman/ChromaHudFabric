@@ -39,15 +39,12 @@ minecraft {
 }
 
 dependencies {
-    compile "com.google.guava:guava:23.5-jre"
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modCompile ("net.fabricmc:fabric-loader-1.8.9:${project.loader_version}") {
-        exclude module: "guava"
-    }
-
-    // PSA: Some older mods, compiled on Loom 0.2.1, might have outdated Maven POMs.
-    // You may need to force-disable transitiveness on them.
+    minecraft "com.mojang:minecraft:1.16.1"
+    mappings "net.fabricmc:yarn:1.16.1+build.21:v2"
+    modImplementation "net.fabricmc:fabric-loader:0.9.1+build.205"
+            
+    //Fabric api
+    modImplementation "net.fabricmc.fabric-api:fabric-api:0.17.0+build.386-1.16.1"
 }
 
 processResources {

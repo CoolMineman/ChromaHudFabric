@@ -17,9 +17,9 @@
 
 package cc.hyperium.mods.chromahud.api;
 
-
 import cc.hyperium.mods.chromahud.ChromaHUDApi;
 import cc.hyperium.utils.JsonHolder;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public abstract class DisplayItem extends Dimension {
         this.ordinal = ordinal;
     }
 
-    public abstract void draw(int x, double y, boolean config);
+    public abstract void draw(int x, double y, boolean config, MatrixStack matrixStack);
 
     public List<ButtonConfig> configOptions() {
         return new ArrayList<>();

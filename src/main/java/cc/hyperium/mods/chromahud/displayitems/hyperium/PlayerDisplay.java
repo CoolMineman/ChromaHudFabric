@@ -21,7 +21,8 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.render.GuiLighting;
+//import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.util.math.MatrixStack;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import org.lwjgl.opengl.GL11;
@@ -39,24 +40,25 @@ public class PlayerDisplay extends DisplayItem {
 
 
     @Override
-    public void draw(int x, double y, boolean config) {
-        GlStateManager.pushMatrix();
-        GlStateManager.color3f(1, 1, 1);
+    public void draw(int x, double y, boolean config, MatrixStack matrixStack) {
+        //todo fix
+        // GlStateManager.pushMatrix();
+        // GlStateManager.color3f(1, 1, 1);
 
-        GlStateManager.translated(x, y, 0);
-        GuiLighting.method_2213();
-        GlStateManager.enableAlphaTest();
+        // GlStateManager.translated(x, y, 0);
+        // GuiLighting.method_2213();
+        // GlStateManager.enableAlphaTest();
 
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.enableAlphaTest();
-        GlStateManager.enableDepthTest();
+        // GlStateManager.shadeModel(GL11.GL_FLAT);
+        // GlStateManager.enableAlphaTest();
+        // GlStateManager.enableDepthTest();
 
-        GlStateManager.rotatef(30, 0, 1.0F, 0);
-        InventoryScreen.method_2946(0, 100, 50, 0, 0, MinecraftClient.getInstance().player);
-        GlStateManager.depthFunc(GL11.GL_LEQUAL);
-        GlStateManager.clearColor();
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.disableDepthTest();
-        GlStateManager.popMatrix();
+        // GlStateManager.rotatef(30, 0, 1.0F, 0);
+        // InventoryScreen.method_2946(0, 100, 50, 0, 0, MinecraftClient.getInstance().player);
+        // GlStateManager.depthFunc(GL11.GL_LEQUAL);
+        // GlStateManager.clearColor();
+        // GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        // GlStateManager.disableDepthTest();
+        // GlStateManager.popMatrix();
     }
 }

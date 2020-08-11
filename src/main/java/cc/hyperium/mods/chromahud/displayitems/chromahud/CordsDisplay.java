@@ -22,6 +22,7 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class CordsDisplay extends DisplayItem {
     }
 
     @Override
-    public void draw(int x, double y, boolean isConfig) {
+    public void draw(int x, double y, boolean isConfig, MatrixStack matrixStack) {
         List<String> tmp = new ArrayList<>();
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player != null) {
@@ -71,19 +72,19 @@ public class CordsDisplay extends DisplayItem {
             DecimalFormat df = new DecimalFormat(start.toString());
 
             if (state == 0) {
-                tmp.add("X: " + df.format(player.x) +
-                    " Y: " + df.format(player.y) +
-                    " Z: " + df.format(player.z));
+                tmp.add("X: " + df.format(player.getX()) +
+                    " Y: " + df.format(player.getY()) +
+                    " Z: " + df.format(player.getZ()));
             } else if (state == 1) {
-                tmp.add("X " + df.format(player.x));
-                tmp.add("Y " + df.format(player.y));
-                tmp.add("Z " + df.format(player.z));
+                tmp.add("X " + df.format(player.getX()));
+                tmp.add("Y " + df.format(player.getY()));
+                tmp.add("Z " + df.format(player.getZ()));
             } else tmp.add("Illegal state of coords unit (" + state + ")");
         } else {
             tmp.add("X: null, Y: null, Z: null");
         }
 
-        ElementRenderer.draw(x, y, tmp);
+        ElementRenderer.draw(x, y, tmp, matrixStack);
         width = isConfig ? ElementRenderer.maxWidth(tmp) : 0;
         height = tmp.size() * 10;
     }

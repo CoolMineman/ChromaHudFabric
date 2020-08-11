@@ -22,6 +22,7 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import com.google.gson.JsonArray;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import io.github.CoolMineman.ScaledResolution;
 
 import java.awt.*;
@@ -122,14 +123,14 @@ public class DisplayElement extends Dimension {
         }
     }
 
-    public void draw() {
+    public void draw(MatrixStack matrixStack) {
         ScaledResolution resolution = new ScaledResolution(MinecraftClient.getInstance());
         int x = (int) (xloc * resolution.getScaledWidth_double());
         double y = (int) (yloc * resolution.getScaledHeight_double());
 
         for (DisplayItem iDisplayItem : displayItems) {
             try {
-                iDisplayItem.draw(x, y, false);
+                iDisplayItem.draw(x, y, false, matrixStack);
                 y += iDisplayItem.getHeight() * ElementRenderer.getCurrentScale();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -187,7 +188,7 @@ public class DisplayElement extends Dimension {
         return this;
     }
 
-    public void drawForConfig() {
+    public void drawForConfig(MatrixStack matrixStack) {
         recalculateColor();
         width = 0;
         height = 0;
@@ -198,7 +199,7 @@ public class DisplayElement extends Dimension {
 
         for (DisplayItem iDisplayItem : displayItems) { 
             try{
-            iDisplayItem.draw(x, y, true);
+            iDisplayItem.draw(x, y, true, matrixStack);
             y += iDisplayItem.getHeight() * ElementRenderer.getCurrentScale();
             addy += iDisplayItem.getHeight() * ElementRenderer.getCurrentScale();
             width = (int) Math.max(iDisplayItem.getWidth() * ElementRenderer.getCurrentScale(), width);
@@ -210,7 +211,7 @@ public class DisplayElement extends Dimension {
 
     }
 
-    public void renderEditView() {
+    public void renderEditView(MatrixStack matrixStack) {
         ScaledResolution resolution = new ScaledResolution(MinecraftClient.getInstance());
         int x = (int) (.8 * resolution.getScaledWidth_double());
         if (rightSided) {
@@ -226,7 +227,7 @@ public class DisplayElement extends Dimension {
         double y = (int) (.2 * resolution.getScaledHeight_double());
 
         for (DisplayItem iDisplayItem : displayItems) {
-            iDisplayItem.draw(x, y, false);
+            iDisplayItem.draw(x, y, false, matrixStack);
             y += iDisplayItem.getHeight() * ElementRenderer.getCurrentScale();
         }
     }

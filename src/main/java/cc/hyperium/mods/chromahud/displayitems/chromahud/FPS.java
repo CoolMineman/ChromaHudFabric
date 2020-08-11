@@ -21,6 +21,7 @@ import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * @author Sk1er
@@ -34,9 +35,9 @@ public class FPS extends DisplayItem {
 
 
     @Override
-    public void draw(int starX, double startY, boolean ignored) {
-        String string = "FPS: " + MinecraftClient.getCurrentFps();
-        ElementRenderer.draw(starX, startY, string);
-        width = MinecraftClient.getInstance().textRenderer.getStringWidth(string);
+    public void draw(int starX, double startY, boolean ignored, MatrixStack matrixStack) {
+        String string = "FPS: " /*+ MinecraftClient.getCurrentFps()*/; //todo needs mixin now
+        ElementRenderer.draw(starX, startY, string, matrixStack);
+        width = MinecraftClient.getInstance().textRenderer.getWidth(string);
     }
 }

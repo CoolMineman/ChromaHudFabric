@@ -23,6 +23,7 @@ import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * @author Sk1er
@@ -35,7 +36,7 @@ public class PingDisplay extends DisplayItem {
     }
 
     @Override
-    public void draw(int starX, double startY, boolean isConfig) {
+    public void draw(int starX, double startY, boolean isConfig, MatrixStack matrixStack) {
         if (MinecraftClient.getInstance().world != null && !MinecraftClient.getInstance().world.isClient && !isConfig) {
             return;
         }
@@ -45,8 +46,8 @@ public class PingDisplay extends DisplayItem {
         if (thePlayer != null) {
             PlayerListEntry playerInfo = MinecraftClient.getInstance().getNetworkHandler().getPlayerListEntry(MinecraftClient.getInstance().player.getUuid());
             String string = "Ping: " + (playerInfo == null ? "error" : playerInfo.getLatency());
-            ElementRenderer.draw(starX, startY, string);
-            width = MinecraftClient.getInstance().textRenderer.getStringWidth(string);
+            ElementRenderer.draw(starX, startY, string, matrixStack);
+            width = MinecraftClient.getInstance().textRenderer.getWidth(string);
         }
     }
 

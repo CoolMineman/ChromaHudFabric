@@ -28,12 +28,14 @@ import cc.hyperium.mods.sk1ercommon.ResolutionUtil;
 import net.minecraft.client.MinecraftClient;
 //import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.client.gui.screen.Screen;
 import io.github.CoolMineman.NextTickDisplayer;
 import io.github.CoolMineman.ScaledResolution;
 import net.minecraft.util.Identifier;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+// import org.lwjgl.input.Keyboard;
+// import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.io.IOException;
@@ -58,6 +60,7 @@ public class GeneralConfigGui extends Screen {
     private int dTick; //double click delay
 
     public GeneralConfigGui(ChromaHUD mod) {
+        super(new LiteralText(""));
         this.mod = mod;
     }
 
@@ -76,7 +79,7 @@ public class GeneralConfigGui extends Screen {
             }
         });
         ((ButtonWidgetIcon) edit).setOutline(true);
-        reg(new ButtonWidget(2, 2, ResolutionUtil.current().getScaledHeight() - 22, 100, 20, "New"), (guiButton) -> {
+        reg(new ButtonWidget(2, ResolutionUtil.current().getScaledHeight() - 22, 100, 20, new LiteralText("New"), b -> {}), (guiButton) -> {
             DisplayElement blank = DisplayElement.blank();
             ChromaHUDApi.getInstance().getElements().add(blank);
             NextTickDisplayer.setDisplayNextTick(new DisplayElementConfig(blank, mod));
@@ -93,207 +96,207 @@ public class GeneralConfigGui extends Screen {
 
     @SuppressWarnings("Duplicates")
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        ScaledResolution current = ResolutionUtil.current();
-        fill(0, 0, current.getScaledWidth(), current.getScaledHeight(), new Color(0, 0, 0, 150).getRGB());
-        super.render(mouseX, mouseY, partialTicks);
-        List<DisplayElement> elementList = mod.getDisplayElements();
-        elementList.stream().filter(element -> currentElement == null || currentElement != element).forEach(element -> {
-            ElementRenderer.startDrawing(element);
-            try {
-                element.drawForConfig();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            ElementRenderer.endDrawing(element);
-        });
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
+        // ScaledResolution current = ResolutionUtil.current();
+        // fill(matrices, 0, current.getScaledWidth(), current.getScaledHeight(), new Color(0, 0, 0, 150).getRGB());
+        // super.render(mouseX, mouseY, partialTicks);
+        // List<DisplayElement> elementList = mod.getDisplayElements();
+        // elementList.stream().filter(element -> currentElement == null || currentElement != element).forEach(element -> {
+        //     ElementRenderer.startDrawing(element);
+        //     try {
+        //         element.drawForConfig();
+        //     } catch (Exception e) {
+        //         e.printStackTrace();
+        //     }
+        //     ElementRenderer.endDrawing(element);
+        // });
 
-        if (currentElement != null) {
-            ScaledResolution resolution = new ScaledResolution(MinecraftClient.getInstance());
-            double offset = currentElement.isRightSided() ? currentElement.getDimensions().getWidth() : 0;
+        // if (currentElement != null) {
+        //     ScaledResolution resolution = new ScaledResolution(MinecraftClient.getInstance());
+        //     double offset = currentElement.isRightSided() ? currentElement.getDimensions().getWidth() : 0;
 
-            // Left top right bottom
-            double x1 = currentElement.getXloc() * resolution.getScaledWidth_double() - offset;
-            double x2 = currentElement.getXloc() * resolution.getScaledWidth_double() + currentElement.getDimensions().getWidth() - offset;
-            double y1 = currentElement.getYloc() * resolution.getScaledHeight_double();
-            double y2 = currentElement.getYloc() * resolution.getScaledHeight_double() + currentElement.getDimensions().getHeight();
+        //     // Left top right bottom
+        //     double x1 = currentElement.getXloc() * resolution.getScaledWidth_double() - offset;
+        //     double x2 = currentElement.getXloc() * resolution.getScaledWidth_double() + currentElement.getDimensions().getWidth() - offset;
+        //     double y1 = currentElement.getYloc() * resolution.getScaledHeight_double();
+        //     double y2 = currentElement.getYloc() * resolution.getScaledHeight_double() + currentElement.getDimensions().getHeight();
 
-            // Chroma selection background
-            if (currentElement.isSelected()) {
-                HyperiumGui.drawChromaBox((int) x1 - 2, (int) y1 - 2, (int) x2 + 2, (int) y2 - 2, 0.2F);
-            }
+        //     // Chroma selection background
+        //     if (currentElement.isSelected()) {
+        //         HyperiumGui.drawChromaBox((int) x1 - 2, (int) y1 - 2, (int) x2 + 2, (int) y2 - 2, 0.2F);
+        //     }
 
-            ElementRenderer.startDrawing(currentElement);
+        //     ElementRenderer.startDrawing(currentElement);
 
-            // Draw the element after the background
-            currentElement.drawForConfig();
+        //     // Draw the element after the background
+        //     currentElement.drawForConfig();
 
-            ElementRenderer.endDrawing(currentElement);
+        //     ElementRenderer.endDrawing(currentElement);
 
-            // Turns the edit image on
-            edit.visible = true;
+        //     // Turns the edit image on
+        //     edit.visible = true;
 
-            int propX = (int) x1 - 5;
-            int propY = (int) y1 - 20;
-            if (propX < 10 || propX > resolution.getScaledWidth() - 200) {
-                propX = resolution.getScaledWidth() / 2;
-            }
-            if (propY > resolution.getScaledHeight() - 5 || propY < 0)
-                propY = resolution.getScaledHeight() / 2;
-            edit.x = propX;
-            edit.y = propY;
-            // moving the thing
-            if (Mouse.isButtonDown(0)) {
-                if (mouseX > x1 - 2 && mouseX < x2 + 2 && mouseY > y1 - 2 && mouseY < y2 + 2 || lastD) {
-                    //inside
-                    double x3 = Mouse.getX() / ResolutionUtil.current().getScaledWidth_double();
-                    double y3 = Mouse.getY() / ResolutionUtil.current().getScaledHeight_double();
-                    currentElement.setXloc(currentElement.getXloc() - (lastX - x3) / ((double) ResolutionUtil.current().getScaleFactor()));
-                    currentElement.setYloc(currentElement.getYloc() + (lastY - y3) / ((double) ResolutionUtil.current().getScaleFactor()));
-                    //Math to keep it inside screen
-                    if (currentElement.getXloc() * resolution.getScaledWidth_double() - offset < 0) {
-                        if (currentElement.isRightSided())
-                            currentElement.setXloc(offset / resolution.getScaledWidth_double());
-                        else
-                            currentElement.setXloc(0);
-                    }
-                    if (currentElement.getYloc() < 0) currentElement.setYloc(0);
-                    if (currentElement.getXloc() * resolution.getScaledWidth() + currentElement.getDimensions().getWidth() - offset > resolution.getScaledWidth()) {
-                        currentElement.setXloc(currentElement.isRightSided() ? 1.0 :
-                            (resolution.getScaledWidth_double() - currentElement.getDimensions().getWidth()) / resolution.getScaledWidth_double());
-                    }
+        //     int propX = (int) x1 - 5;
+        //     int propY = (int) y1 - 20;
+        //     if (propX < 10 || propX > resolution.getScaledWidth() - 200) {
+        //         propX = resolution.getScaledWidth() / 2;
+        //     }
+        //     if (propY > resolution.getScaledHeight() - 5 || propY < 0)
+        //         propY = resolution.getScaledHeight() / 2;
+        //     edit.x = propX;
+        //     edit.y = propY;
+        //     // moving the thing
+        //     if (Mouse.isButtonDown(0)) {
+        //         if (mouseX > x1 - 2 && mouseX < x2 + 2 && mouseY > y1 - 2 && mouseY < y2 + 2 || lastD) {
+        //             //inside
+        //             double x3 = Mouse.getX() / ResolutionUtil.current().getScaledWidth_double();
+        //             double y3 = Mouse.getY() / ResolutionUtil.current().getScaledHeight_double();
+        //             currentElement.setXloc(currentElement.getXloc() - (lastX - x3) / ((double) ResolutionUtil.current().getScaleFactor()));
+        //             currentElement.setYloc(currentElement.getYloc() + (lastY - y3) / ((double) ResolutionUtil.current().getScaleFactor()));
+        //             //Math to keep it inside screen
+        //             if (currentElement.getXloc() * resolution.getScaledWidth_double() - offset < 0) {
+        //                 if (currentElement.isRightSided())
+        //                     currentElement.setXloc(offset / resolution.getScaledWidth_double());
+        //                 else
+        //                     currentElement.setXloc(0);
+        //             }
+        //             if (currentElement.getYloc() < 0) currentElement.setYloc(0);
+        //             if (currentElement.getXloc() * resolution.getScaledWidth() + currentElement.getDimensions().getWidth() - offset > resolution.getScaledWidth()) {
+        //                 currentElement.setXloc(currentElement.isRightSided() ? 1.0 :
+        //                     (resolution.getScaledWidth_double() - currentElement.getDimensions().getWidth()) / resolution.getScaledWidth_double());
+        //             }
 
-                    if (currentElement.getYloc() * resolution.getScaledHeight() + currentElement.getDimensions().getHeight() > resolution.getScaledHeight()) {
-                        currentElement.setYloc((resolution.getScaledHeight_double() - currentElement.getDimensions().getHeight()) / resolution.getScaledHeight_double());
-                    }
+        //             if (currentElement.getYloc() * resolution.getScaledHeight() + currentElement.getDimensions().getHeight() > resolution.getScaledHeight()) {
+        //                 currentElement.setYloc((resolution.getScaledHeight_double() - currentElement.getDimensions().getHeight()) / resolution.getScaledHeight_double());
+        //             }
 
-                    lastD = true;
-                }
-            } else {
-                lastD = false;
-            }
-        } else {
-            edit.visible = false;
-        }
+        //             lastD = true;
+        //         }
+        //     } else {
+        //         lastD = false;
+        //     }
+        // } else {
+        //     edit.visible = false;
+        // }
 
-        lastX = Mouse.getX() / ResolutionUtil.current().getScaledWidth_double();
-        lastY = Mouse.getY() / ResolutionUtil.current().getScaledHeight_double();
-        if (dTick <= 0 && pastClick) pastClick = false;
-        if (pastClick) dTick--;
+        // lastX = Mouse.getX() / ResolutionUtil.current().getScaledWidth_double();
+        // lastY = Mouse.getY() / ResolutionUtil.current().getScaledHeight_double();
+        // if (dTick <= 0 && pastClick) pastClick = false;
+        // if (pastClick) dTick--;
     }
 
-    @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+    // @Override
+    // protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+    //     super.mouseClicked(mouseX, mouseY, mouseButton);
 
-    }
+    // }
 
-    @Override
-    public void handleInput() {
-        super.handleInput();
-        ScaledResolution current = ResolutionUtil.current();
-        int i = Mouse.getEventDWheel();
-        List<DisplayElement> elements = ChromaHUDApi.getInstance().getElements();
-        if (elements.size() > 0) {
-            if (i < 0) {
-                if (currentElement == null) {
-                    currentElement = elements.get(0);
-                } else {
-                    int i1 = elements.indexOf(currentElement);
-                    i1++;
-                    if (i1 > elements.size() - 1) i1 = 0;
-                    currentElement = elements.get(i1);
-                }
-            } else if (i > 0) {
-                if (currentElement == null) {
-                    currentElement = elements.get(0);
-                } else {
-                    int i1 = elements.indexOf(currentElement);
-                    i1--;
-                    if (i1 < 0) i1 = elements.size() - 1;
-                    currentElement = elements.get(i1);
-                }
-            }
-        }
+    // @Override
+    // public void handleInput() {
+    //     super.handleInput();
+    //     ScaledResolution current = ResolutionUtil.current();
+    //     int i = Mouse.getEventDWheel();
+    //     List<DisplayElement> elements = ChromaHUDApi.getInstance().getElements();
+    //     if (elements.size() > 0) {
+    //         if (i < 0) {
+    //             if (currentElement == null) {
+    //                 currentElement = elements.get(0);
+    //             } else {
+    //                 int i1 = elements.indexOf(currentElement);
+    //                 i1++;
+    //                 if (i1 > elements.size() - 1) i1 = 0;
+    //                 currentElement = elements.get(i1);
+    //             }
+    //         } else if (i > 0) {
+    //             if (currentElement == null) {
+    //                 currentElement = elements.get(0);
+    //             } else {
+    //                 int i1 = elements.indexOf(currentElement);
+    //                 i1--;
+    //                 if (i1 < 0) i1 = elements.size() - 1;
+    //                 currentElement = elements.get(i1);
+    //             }
+    //         }
+    //     }
 
-        boolean isOver = false;
+    //     boolean isOver = false;
 
-        for (ButtonWidget button : buttons) {
-            if (button.isFocused()) {
-                isOver = true;
-            }
-        }
+    //     for (ButtonWidget button : buttons) {
+    //         if (button.isFocused()) {
+    //             isOver = true;
+    //         }
+    //     }
 
-        if (!mouseDown && Mouse.isButtonDown(0) && !isOver) {
-            //Mouse pushed down. Calculate current element
-            int clickX = Mouse.getX() / current.getScaleFactor();
-            int clickY = Mouse.getY() / current.getScaleFactor();
-            boolean found = false;
-            for (DisplayElement element : mod.getDisplayElements()) {
-                Dimension dimension = element.getDimensions();
-                double displayXLoc = current.getScaledWidth_double() * element.getXloc();
-                if (element.isRightSided()) displayXLoc -= element.getDimensions().getWidth();
-                double displayYLoc = current.getScaledHeight_double() - current.getScaledHeight_double() * element.getYloc();
+    //     if (!mouseDown && Mouse.isButtonDown(0) && !isOver) {
+    //         //Mouse pushed down. Calculate current element
+    //         int clickX = Mouse.getX() / current.getScaleFactor();
+    //         int clickY = Mouse.getY() / current.getScaleFactor();
+    //         boolean found = false;
+    //         for (DisplayElement element : mod.getDisplayElements()) {
+    //             Dimension dimension = element.getDimensions();
+    //             double displayXLoc = current.getScaledWidth_double() * element.getXloc();
+    //             if (element.isRightSided()) displayXLoc -= element.getDimensions().getWidth();
+    //             double displayYLoc = current.getScaledHeight_double() - current.getScaledHeight_double() * element.getYloc();
 
-                if (clickX > displayXLoc
-                    && clickX < displayXLoc + dimension.getWidth()
-                    && clickY < displayYLoc
-                    && clickY > displayYLoc - dimension.getHeight()) {
+    //             if (clickX > displayXLoc
+    //                 && clickX < displayXLoc + dimension.getWidth()
+    //                 && clickY < displayYLoc
+    //                 && clickY > displayYLoc - dimension.getHeight()) {
 
-                    // Open gui
-                    if (currentElement != null && currentElement == element && pastClick) {
-                        // Safely nuke the fields and deactivate the chroma effect
-                        element.setSelected(false);
-                        currentElement = null;
+    //                 // Open gui
+    //                 if (currentElement != null && currentElement == element && pastClick) {
+    //                     // Safely nuke the fields and deactivate the chroma effect
+    //                     element.setSelected(false);
+    //                     currentElement = null;
 
-                        //mc.getSoundHandler().playSound(PositionedSoundRecord.create(new Identifier("gui.button.press"), 1.0F));
-                        NextTickDisplayer.setDisplayNextTick(new DisplayElementConfig(element, mod));
-                        return;
-                    }
+    //                     //mc.getSoundHandler().playSound(PositionedSoundRecord.create(new Identifier("gui.button.press"), 1.0F));
+    //                     NextTickDisplayer.setDisplayNextTick(new DisplayElementConfig(element, mod));
+    //                     return;
+    //                 }
 
-                    currentElement = element;
-                    element.setSelected(true);
-                    found = true;
-                    break;
-                }
-            }
+    //                 currentElement = element;
+    //                 element.setSelected(true);
+    //                 found = true;
+    //                 break;
+    //             }
+    //         }
 
-            if (!found) {
-                if (currentElement != null) currentElement.setSelected(false);
-                currentElement = null;
-            }
-        }
+    //         if (!found) {
+    //             if (currentElement != null) currentElement.setSelected(false);
+    //             currentElement = null;
+    //         }
+    //     }
 
-        mouseDown = Mouse.isButtonDown(0);
-        if (mouseDown) {
-            pastClick = true;
-            dTick = 5;
-        }
-    }
+    //     mouseDown = Mouse.isButtonDown(0);
+    //     if (mouseDown) {
+    //         pastClick = true;
+    //         dTick = 5;
+    //     }
+    // }
 
-    @Override
-    protected void buttonPressed(ButtonWidget button) {
-        Consumer<ButtonWidget> guiButtonConsumer = clicks.get(button);
-        if (guiButtonConsumer != null) guiButtonConsumer.accept(button);
-    }
+    // @Override
+    // protected void buttonPressed(ButtonWidget button) {
+    //     Consumer<ButtonWidget> guiButtonConsumer = clicks.get(button);
+    //     if (guiButtonConsumer != null) guiButtonConsumer.accept(button);
+    // }
 
-    @Override
-    public void removed() {
-        super.removed();
-        mod.saveState();
-    }
+    // @Override
+    // public void removed() {
+    //     super.removed();
+    //     mod.saveState();
+    // }
 
-    public void display() {
-        NextTickDisplayer.setDisplayNextTick(this);
-    }
+    // public void display() {
+    //     NextTickDisplayer.setDisplayNextTick(this);
+    // }
 
 
-    @Override
-    protected void keyPressed(char typedChar, int keyCode) {
-        if (keyCode == Keyboard.KEY_RETURN && currentElement != null) {
-            NextTickDisplayer.setDisplayNextTick(new DisplayElementConfig(currentElement, mod));
-        }
+    // @Override
+    // protected void keyPressed(char typedChar, int keyCode) {
+    //     if (keyCode == Keyboard.KEY_RETURN && currentElement != null) {
+    //         NextTickDisplayer.setDisplayNextTick(new DisplayElementConfig(currentElement, mod));
+    //     }
 
-        super.keyPressed(typedChar, keyCode);
-    }
+    //     super.keyPressed(typedChar, keyCode);
+    // }
 }

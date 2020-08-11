@@ -20,6 +20,7 @@ package cc.hyperium.mods.chromahud.commands;
 //import cc.hyperium.commands.BaseCommand;
 import cc.hyperium.mods.chromahud.ChromaHUD;
 import cc.hyperium.mods.chromahud.gui.GeneralConfigGui;
+import net.minecraft.client.MinecraftClient;
 
 /**
  * @author Sk1er
@@ -44,6 +45,6 @@ public class CommandChromaHUD { //implements BaseCommand {
 
     //@Override
     public void onExecute() {
-        new GeneralConfigGui(mod).display();
+        MinecraftClient.getInstance().openScreen(new GeneralConfigGui(mod));
     }
 }

@@ -21,10 +21,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.input.Mouse;
+//import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -64,29 +65,33 @@ public class ElementRenderer {
         return c;
     }
 
-    public static void draw(int x, double y, String string) {
+    public static void draw(int x, double y, String string, MatrixStack matrixStack) {
         List<String> tmp = new ArrayList<>();
         tmp.add(string);
-        draw(x, y, tmp);
+        draw(x, y, tmp, matrixStack);
     }
 
-    public static void draw(int x, double y, List<String> list) {
+    public static void draw(int x, double y, List<String> list, MatrixStack matrixStack) {
         double ty = y;
         for (String string : list) {
             int shift = current.isRightSided()
-                ? fontRendererObj.getStringWidth(string)
+                ? fontRendererObj.getWidth(string)
                 : 0;
 
             if (current.isHighlighted()) {
-                int stringWidth = fontRendererObj.getStringWidth(string);
-                DrawableHelper.fill((int) ((x - 1) / currentScale - shift), (int) ((ty - 1) / currentScale), (int) ((x + 1) / currentScale)
+                int stringWidth = fontRendererObj.getWidth(string);
+                DrawableHelper.fill(matrixStack, (int) ((x - 1) / currentScale - shift), (int) ((ty - 1) / currentScale), (int) ((x + 1) / currentScale)
                     + stringWidth - shift, (int) ((ty + 1) / currentScale) + 8, new Color(0, 0, 0, 120).getRGB());
             }
 
             if (current.isChroma()) {
-                drawChromaString(string, x - shift, (int) ty);
+                drawChromaString(string, x - shift, (int) ty, matrixStack);
             } else {
-                fontRendererObj.draw(string, (int) (x / currentScale - shift), (int) (ty / currentScale), getColor(color), current.isShadow());
+                if (current.isShadow()) {
+                    fontRendererObj.drawWithShadow(matrixStack, string, (int) (x / currentScale - shift), (int) (ty / currentScale), getColor(color));
+                } else {
+                    fontRendererObj.draw(matrixStack, string, (int) (x / currentScale - shift), (int) (ty / currentScale), getColor(color));
+                }
             }
 
             ty += 10D * currentScale;
@@ -94,7 +99,7 @@ public class ElementRenderer {
     }
 
     // Don't shift, by the time it is here it is already shifted
-    private static void drawChromaString(String text, int xIn, int y) {
+    private static void drawChromaString(String text, int xIn, int y, MatrixStack matrixStack) {
         TextRenderer renderer = MinecraftClient.getInstance().textRenderer;
         int x = xIn;
 
@@ -105,8 +110,12 @@ public class ElementRenderer {
             float ff = current.isStaticChroma() ? 1000.0F : 2000.0F;
             int i = Color.HSBtoRGB((float) (l % (int) ff) / ff, 0.8F, 0.8F);
             String tmp = String.valueOf(c);
-            renderer.draw(tmp, (float) ((double) x / currentScale), (float) ((double) y / currentScale), i, current.isShadow());
-            x += (double) renderer.getStringWidth(String.valueOf(c)) * currentScale;
+            if (current.isShadow()) {
+                renderer.drawWithShadow(matrixStack, tmp, (float) ((double) x / currentScale), (float) ((double) y / currentScale), i);
+            } else {
+                renderer.draw(matrixStack, tmp, (float) ((double) x / currentScale), (float) ((double) y / currentScale), i);
+            } 
+            x += (double) renderer.getWidth(String.valueOf(c)) * currentScale;
         }
     }
 
@@ -115,7 +124,7 @@ public class ElementRenderer {
         int max = 0;
 
         for (String s : list) {
-            max = Math.max(max, MinecraftClient.getInstance().textRenderer.getStringWidth(s));
+            max = Math.max(max, MinecraftClient.getInstance().textRenderer.getWidth(s));
         }
 
         return max;
@@ -134,7 +143,7 @@ public class ElementRenderer {
         return current;
     }
 
-    public static void render(List<ItemStack> itemStacks, int x, double y, boolean showDurability) {
+    public static void render(List<ItemStack> itemStacks, int x, double y, boolean showDurability, MatrixStack matrixStack) {
         GlStateManager.pushMatrix();
         int line = 0;
         ItemRenderer renderItem = MinecraftClient.getInstance().getItemRenderer();
@@ -142,8 +151,9 @@ public class ElementRenderer {
         for (ItemStack stack : itemStacks) {
             if (stack.getMaxDamage() == 0) continue;
             String dur = stack.getMaxDamage() - stack.getDamage() + "";
-            renderItem.method_3988(stack, (int) (x / ElementRenderer.getCurrentScale() - (current.isRightSided() ? (showDurability ? currentScale + fontRendererObj.getStringWidth(dur) : -8) : 0)), (int) ((y + (16 * line * ElementRenderer.getCurrentScale())) / ElementRenderer.getCurrentScale()));
-            if (showDurability) ElementRenderer.draw((int) (x + (double) 20 * currentScale), y + (16 * line) + 4, dur);
+            //todo fix
+            //renderItem.method_3988(stack, (int) (x / ElementRenderer.getCurrentScale() - (current.isRightSided() ? (showDurability ? currentScale + fontRendererObj.getWidth(dur) : -8) : 0)), (int) ((y + (16 * line * ElementRenderer.getCurrentScale())) / ElementRenderer.getCurrentScale()));
+            if (showDurability) ElementRenderer.draw((int) (x + (double) 20 * currentScale), y + (16 * line) + 4, dur, matrixStack);
             line++;
         }
 
@@ -176,47 +186,51 @@ public class ElementRenderer {
 
     //@InvokeEvent
     public void tick() {
-        if (MinecraftClient.getInstance().field_2600) {
+        try  {
             cValue = MinecraftClient.getInstance().worldRenderer.getChunksDebugString().split("/")[0].trim();
+        } catch (Exception no) {
+            
         }
     }
 
     // Right CPS Counter
 
     //@InvokeEvent
-    public void onRenderTick() {
-        if (!minecraft.field_2600 || minecraft.options.debugEnabled) return;
-        renderElements();
-        GlStateManager.clearColor();
+    public void onRenderTick(MatrixStack matrixStack) {
+        if (/*minecraft.field_2600 || */minecraft.options.debugEnabled) return;
+        renderElements(matrixStack);
+        //GlStateManager.clearColor();
 
     }
 
-    private void renderElements() {
+    private void renderElements(MatrixStack matrixStack) {
         if (fontRendererObj == null) fontRendererObj = MinecraftClient.getInstance().textRenderer;
 
-        // Mouse Button Left
-        boolean m = Mouse.isButtonDown(0);
-        if (m != last) {
-            last = m;
-            if (m) clicks.add(System.currentTimeMillis());
-        }
+        //todo fix
+        // // Mouse Button Left
+        // boolean m = Mouse.isButtonDown(0);
+        // if (m != last) {
+        //     last = m;
+        //     if (m) clicks.add(System.currentTimeMillis());
+        // }
 
-        // Mouse Button Right
-        boolean rm = Mouse.isButtonDown(1);
-        if (rm != rLast) {
-            rLast = rm;
-            if (rm) rClicks.add(System.currentTimeMillis());
-        }
+        // // Mouse Button Right
+        // boolean rm = Mouse.isButtonDown(1);
+        // if (rm != rLast) {
+        //     rLast = rm;
+        //     if (rm) rClicks.add(System.currentTimeMillis());
+        // }
 
         // Others
-        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        //GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         List<DisplayElement> elementList = mod.getDisplayElements();
         elementList.forEach(element -> {
             startDrawing(element);
             try {
-                element.draw();
+                element.draw(matrixStack);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
             endDrawing(element);
         });

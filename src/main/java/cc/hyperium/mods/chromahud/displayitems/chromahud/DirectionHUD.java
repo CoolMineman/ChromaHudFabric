@@ -22,6 +22,7 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class DirectionHUD extends DisplayItem {
         shortDirection = raw.optBoolean("shortDirection");
     }
 
-    public void draw(int x, double y, boolean isConfig) {
+    public void draw(int x, double y, boolean isConfig, MatrixStack matrixStack) {
         List<String> list = new ArrayList<>();
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player != null) {
@@ -60,7 +61,7 @@ public class DirectionHUD extends DisplayItem {
             } catch (Exception ignored) {}
         }
 
-        ElementRenderer.draw(x, y, list);
+        ElementRenderer.draw(x, y, list, matrixStack);
         width = isConfig ? ElementRenderer.maxWidth(list) : 0;
     }
 

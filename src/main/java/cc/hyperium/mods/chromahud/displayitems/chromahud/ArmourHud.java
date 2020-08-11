@@ -23,8 +23,10 @@ import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +56,7 @@ public class ArmourHud extends DisplayItem {
     }
 
     @Override
-    public void draw(int starX, double startY, boolean isConfig) {
+    public void draw(int starX, double startY, boolean isConfig, MatrixStack matrixStack) {
         list.clear();
         if (isConfig) {
             if (armourOnTop) {
@@ -79,15 +81,16 @@ public class ArmourHud extends DisplayItem {
             list = itemsToRender();
         }
 
-        drawArmour(starX, startY);
+        drawArmour(starX, startY, matrixStack);
         height = getArmourHeight();
     }
 
-    private void drawArmour(int x, double y) {
+    private void drawArmour(int x, double y, MatrixStack matrixStack) {
         ItemRenderer renderItem = MinecraftClient.getInstance().getItemRenderer();
         ClientPlayerEntity thePlayer = MinecraftClient.getInstance().player;
-        if (thePlayer == null || renderItem == null) return;
-        ElementRenderer.render(list, x, y, dur);
+        if (thePlayer == null || renderItem == null)
+            return;
+        ElementRenderer.render(list, x, y, dur, matrixStack);
     }
 
     private int getArmourHeight() {
@@ -97,12 +100,13 @@ public class ArmourHud extends DisplayItem {
     private List<ItemStack> itemsToRender() {
         List<ItemStack> items = new ArrayList<>();
         ItemStack heldItem = MinecraftClient.getInstance().player.inventory.getCursorStack();
-        if (hand && heldItem != null && !armourOnTop) items.add(heldItem);
-        ItemStack[] inventory = MinecraftClient.getInstance().player.inventory.field_8315;
+        if (hand && heldItem != null && !armourOnTop)
+            items.add(heldItem);
+        DefaultedList<ItemStack> inventory = MinecraftClient.getInstance().player.inventory.armor;
 
         for (int i = 3; i >= 0; i--) {
-            if (inventory[i] != null && inventory[i].getItem() != null) {
-                items.add(inventory[i]);
+            if (inventory.get(i) != null && inventory.get(i).getItem() != null) {
+                items.add(inventory.get(i));
             }
         }
 

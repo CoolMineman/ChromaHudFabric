@@ -7,7 +7,7 @@ public class ScaledResolution {
     private Window window;
 
     public ScaledResolution(MinecraftClient minecraftClient) {
-        this.window = new Window(minecraftClient);
+        this.window = minecraftClient.getWindow();
     }
     public int getScaledWidth()
     {
@@ -21,16 +21,18 @@ public class ScaledResolution {
 
     public double getScaledWidth_double()
     {
-        return this.window.method_2467();
+        int i = (int)((double)window.getFramebufferWidth() / window.getScaleFactor());
+        return (double)this.window.getFramebufferWidth() / (window.getScaleFactor() > (double)i ? i + 1 : i);
     }
 
     public double getScaledHeight_double()
     {
-        return this.window.method_2468();
+        int i = (int)((double)window.getFramebufferHeight() / window.getScaleFactor());
+        return (double)this.window.getFramebufferHeight() / (window.getScaleFactor() > (double)i ? i + 1 : i);
     }
 
     public int getScaleFactor()
     {
-        return this.window.method_2469();
+        return MinecraftClient.getInstance().options.guiScale;
     }
 }

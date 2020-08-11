@@ -21,6 +21,7 @@ import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * @author Sk1er
@@ -33,8 +34,8 @@ public class CpsDisplay extends DisplayItem {
     }
 
     @Override
-    public void draw(int starX, double startY, boolean isConfig) {
-        ElementRenderer.draw(starX, startY, "CPS: " + ElementRenderer.getCPS());
-        width = isConfig ? MinecraftClient.getInstance().textRenderer.getStringWidth("CPS: " + ElementRenderer.getCPS()) : 0;
+    public void draw(int starX, double startY, boolean isConfig, MatrixStack matrixStack) {
+        ElementRenderer.draw(starX, startY, "CPS: " + ElementRenderer.getCPS(), matrixStack);
+        width = isConfig ? MinecraftClient.getInstance().textRenderer.getWidth("CPS: " + ElementRenderer.getCPS()) : 0;
     }
 }

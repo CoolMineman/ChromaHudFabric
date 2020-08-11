@@ -21,6 +21,7 @@ import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,14 +48,14 @@ public class TimeHud extends DisplayItem {
     }
 
     @Override
-    public void draw(int starX, double startY, boolean isConfig) {
+    public void draw(int starX, double startY, boolean isConfig, MatrixStack matrixStack) {
         try {
             String string = new SimpleDateFormat(format).format(new Date(System.currentTimeMillis()));
-            ElementRenderer.draw(starX, startY, string);
-            width = isConfig ? MinecraftClient.getInstance().textRenderer.getStringWidth(string) : 0;
+            ElementRenderer.draw(starX, startY, string, matrixStack);
+            width = isConfig ? MinecraftClient.getInstance().textRenderer.getWidth(string) : 0;
             height = 10;
         } catch (Exception e) {
-            ElementRenderer.draw(starX, startY, "Invalid");
+            ElementRenderer.draw(starX, startY, "Invalid", matrixStack);
         }
     }
 

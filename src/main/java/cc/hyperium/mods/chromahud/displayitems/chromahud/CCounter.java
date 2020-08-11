@@ -17,11 +17,11 @@
 
 package cc.hyperium.mods.chromahud.displayitems.chromahud;
 
-
 import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 
 /**
  * @author Sk1er
@@ -35,9 +35,9 @@ public class CCounter extends DisplayItem {
 
 
     @Override
-    public void draw(int starX, double startY, boolean ignored) {
+    public void draw(int starX, double startY, boolean ignored, MatrixStack matrixStack) {
         String string = ElementRenderer.getCValue();
-        ElementRenderer.draw(starX, startY, string);
-        width = MinecraftClient.getInstance().textRenderer.getStringWidth(string);
+        ElementRenderer.draw(starX, startY, string, matrixStack);
+        width = MinecraftClient.getInstance().textRenderer.getWidth(string);
     }
 }
