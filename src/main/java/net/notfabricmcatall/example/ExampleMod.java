@@ -2,14 +2,14 @@ package net.notfabricmcatall.example;
 
 import cc.hyperium.mods.chromahud.ChromaHUD;
 import cc.hyperium.mods.chromahud.ElementRenderer;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.ClientModInitializer;
 
-public class ExampleMod implements ModInitializer {
+public class ExampleMod implements ClientModInitializer {
 	public static ChromaHUD chromahud;
 	public static ElementRenderer elementrenderer;
 
 	@Override
-	public void onInitialize() {
+	public void onInitializeClient() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.

@@ -60,7 +60,7 @@ public class GeneralConfigGui extends Screen {
     private int dTick; //double click delay
 
     public GeneralConfigGui(ChromaHUD mod) {
-        super(new LiteralText(""));
+        super(new LiteralText("General Config GUI"));
         this.mod = mod;
     }
 
@@ -97,6 +97,7 @@ public class GeneralConfigGui extends Screen {
     @SuppressWarnings("Duplicates")
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float partialTicks) {
+        System.out.println("render");
         // ScaledResolution current = ResolutionUtil.current();
         // fill(matrices, 0, current.getScaledWidth(), current.getScaledHeight(), new Color(0, 0, 0, 150).getRGB());
         // super.render(mouseX, mouseY, partialTicks);
@@ -280,15 +281,15 @@ public class GeneralConfigGui extends Screen {
     //     if (guiButtonConsumer != null) guiButtonConsumer.accept(button);
     // }
 
-    // @Override
-    // public void removed() {
-    //     super.removed();
-    //     mod.saveState();
-    // }
+    @Override
+    public void removed() {
+        super.removed();
+        mod.saveState();
+    }
 
-    // public void display() {
-    //     NextTickDisplayer.setDisplayNextTick(this);
-    // }
+    public void display() {
+        NextTickDisplayer.setDisplayNextTick(this);
+    }
 
 
     // @Override

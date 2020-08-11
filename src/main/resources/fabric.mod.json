@@ -18,9 +18,10 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "client": [
       "net.notfabricmcatall.example.ExampleMod"
-    ]
+    ],
+    "cotton-client-commands": ["net.notfabricmcatall.example.EpicCommand"]
   },
   "mixins": [
     "chromahudfabric.mixins.json"

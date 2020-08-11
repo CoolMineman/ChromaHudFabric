@@ -7,8 +7,7 @@
   ],
   "client": [
     "ExampleMixin",
-    "ToBeNamedOne",
-    "CommandMixin"
+    "ToBeNamedOne"
   ],
   "injectors": {
     "defaultRequire": 1

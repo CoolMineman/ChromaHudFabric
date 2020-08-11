@@ -20,6 +20,7 @@ package cc.hyperium.mods.chromahud.commands;
 //import cc.hyperium.commands.BaseCommand;
 import cc.hyperium.mods.chromahud.ChromaHUD;
 import cc.hyperium.mods.chromahud.gui.GeneralConfigGui;
+import io.github.CoolMineman.NextTickDisplayer;
 import net.minecraft.client.MinecraftClient;
 
 /**
@@ -45,6 +46,6 @@ public class CommandChromaHUD { //implements BaseCommand {
 
     //@Override
     public void onExecute() {
-        MinecraftClient.getInstance().openScreen(new GeneralConfigGui(mod));
+        NextTickDisplayer.setDisplayNextTick(new GeneralConfigGui(mod));
     }
 }
