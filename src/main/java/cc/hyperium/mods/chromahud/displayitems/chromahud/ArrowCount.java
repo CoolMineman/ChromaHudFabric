@@ -22,7 +22,7 @@ import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -49,7 +49,7 @@ public class ArrowCount extends DisplayItem {
         list.add(new ItemStack(Item.byRawId(262), 64));
         ClientPlayerEntity thePlayer = MinecraftClient.getInstance().player;
         if (thePlayer != null) {
-            int c = Arrays.stream(thePlayer.inventory.field_8314).filter(Objects::nonNull).filter(is ->
+            int c = Arrays.stream(thePlayer.inventory.main).filter(Objects::nonNull).filter(is ->
                 is.getTranslationKey().equalsIgnoreCase("item.arrow")).mapToInt(is -> is.count).sum();
             ElementRenderer.render(list, starX, startY, false);
             ElementRenderer.draw(starX + 16, startY + 8, "x" + (isConfig ? 64 : c));

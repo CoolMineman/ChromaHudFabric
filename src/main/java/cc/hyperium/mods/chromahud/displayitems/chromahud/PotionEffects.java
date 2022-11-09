@@ -57,27 +57,27 @@ public class PotionEffects extends DisplayItem {
             effects.add(new StatusEffectInstance(1, 100, 1));
             effects.add(new StatusEffectInstance(3, 100, 2));
         } else {
-            effects = MinecraftClient.getInstance().player.method_7134();
+            effects = MinecraftClient.getInstance().player.getStatusEffectInstances();
         }
 
         List<String> tmp = new ArrayList<>();
 
         for (StatusEffectInstance potioneffect : effects) {
-            StatusEffect potion =  StatusEffect.field_7293[potioneffect.method_6872()];
+            StatusEffect potion =  StatusEffect.STATUS_EFFECTS[potioneffect.getEffectId()];
 
             if (potionIcon) {
                 GlStateManager.clearColor(1.0F, 1.0F, 1.0F, 1.0F);
                 MinecraftClient.getInstance().getTextureManager().bindTexture(new Identifier("textures/gui/container/inventory.png"));
 
-                if (potion.method_6865()) {
-                    int potionStatusIconIndex = potion.method_6866();
+                if (potion.method_2443()) {
+                    int potionStatusIconIndex = potion.method_2444();
                     drawTexturedModalRect(!ElementRenderer.getCurrent().isRightSided() ? (int) (x / scale) - 20 :
                             (int) (x / scale), (int) ((y + row * 16)) - 4, potionStatusIconIndex % 8 * 18,
                         198 + potionStatusIconIndex / 8 * 18, 18, 18);
                 }
             }
 
-            StringBuilder s1 = new StringBuilder(I18n.translate(potion.method_6849()));
+            StringBuilder s1 = new StringBuilder(I18n.translate(potion.getTranslationKey()));
 
             switch (potioneffect.getAmplifier()) {
                 case 1:
@@ -93,7 +93,7 @@ public class PotionEffects extends DisplayItem {
                     break;
             }
 
-            String s = StatusEffect.method_6853(potioneffect);
+            String s = StatusEffect.method_2436(potioneffect);
             String text = s1 + " - " + s;
             tmp.add(text);
             ElementRenderer.draw((int) (x / scale), ((y + row * 16)), text);

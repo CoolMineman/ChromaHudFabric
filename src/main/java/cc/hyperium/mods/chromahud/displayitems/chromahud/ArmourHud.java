@@ -21,7 +21,7 @@ import cc.hyperium.mods.chromahud.ElementRenderer;
 import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.ClientPlayerEntity;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -98,7 +98,7 @@ public class ArmourHud extends DisplayItem {
         List<ItemStack> items = new ArrayList<>();
         ItemStack heldItem = MinecraftClient.getInstance().player.inventory.getCursorStack();
         if (hand && heldItem != null && !armourOnTop) items.add(heldItem);
-        ItemStack[] inventory = MinecraftClient.getInstance().player.inventory.field_8315;
+        ItemStack[] inventory = MinecraftClient.getInstance().player.inventory.armor;
 
         for (int i = 3; i >= 0; i--) {
             if (inventory[i] != null && inventory[i].getItem() != null) {

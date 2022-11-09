@@ -21,7 +21,8 @@ import cc.hyperium.mods.chromahud.api.DisplayItem;
 import cc.hyperium.utils.JsonHolder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.client.render.GuiLighting;
+import net.minecraft.client.gui.screen.ingame.SurvivalInventoryScreen;
+import net.minecraft.client.render.DiffuseLighting;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import org.lwjgl.opengl.GL11;
@@ -44,7 +45,7 @@ public class PlayerDisplay extends DisplayItem {
         GlStateManager.color3f(1, 1, 1);
 
         GlStateManager.translated(x, y, 0);
-        GuiLighting.method_2213();
+        DiffuseLighting.enableNormally();
         GlStateManager.enableAlphaTest();
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
@@ -52,7 +53,7 @@ public class PlayerDisplay extends DisplayItem {
         GlStateManager.enableDepthTest();
 
         GlStateManager.rotatef(30, 0, 1.0F, 0);
-        InventoryScreen.method_2946(0, 100, 50, 0, 0, MinecraftClient.getInstance().player);
+        SurvivalInventoryScreen.renderEntity(0, 100, 50, 0, 0, MinecraftClient.getInstance().player);
         GlStateManager.depthFunc(GL11.GL_LEQUAL);
         GlStateManager.clearColor();
         GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);

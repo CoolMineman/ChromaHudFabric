@@ -142,7 +142,7 @@ public class ElementRenderer {
         for (ItemStack stack : itemStacks) {
             if (stack.getMaxDamage() == 0) continue;
             String dur = stack.getMaxDamage() - stack.getDamage() + "";
-            renderItem.method_3988(stack, (int) (x / ElementRenderer.getCurrentScale() - (current.isRightSided() ? (showDurability ? currentScale + fontRendererObj.getStringWidth(dur) : -8) : 0)), (int) ((y + (16 * line * ElementRenderer.getCurrentScale())) / ElementRenderer.getCurrentScale()));
+            renderItem.renderInGuiWithOverrides(stack, (int) (x / ElementRenderer.getCurrentScale() - (current.isRightSided() ? (showDurability ? currentScale + fontRendererObj.getStringWidth(dur) : -8) : 0)), (int) ((y + (16 * line * ElementRenderer.getCurrentScale())) / ElementRenderer.getCurrentScale()));
             if (showDurability) ElementRenderer.draw((int) (x + (double) 20 * currentScale), y + (16 * line) + 4, dur);
             line++;
         }
@@ -176,7 +176,7 @@ public class ElementRenderer {
 
     //@InvokeEvent
     public void tick() {
-        if (MinecraftClient.getInstance().field_2600) {
+        if (MinecraftClient.getInstance().focused) {
             cValue = MinecraftClient.getInstance().worldRenderer.getChunksDebugString().split("/")[0].trim();
         }
     }
@@ -185,7 +185,7 @@ public class ElementRenderer {
 
     //@InvokeEvent
     public void onRenderTick() {
-        if (!minecraft.field_2600 || minecraft.options.debugEnabled) return;
+        if (!minecraft.focused || minecraft.options.debugEnabled) return;
         renderElements();
         GlStateManager.clearColor();
 

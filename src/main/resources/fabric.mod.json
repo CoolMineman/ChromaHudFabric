@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.notfabricmcatall.example.ExampleMod"
+      "net.notfabricmcatall.example.ChromaHudFabric"
     ]
   },
   "mixins": [

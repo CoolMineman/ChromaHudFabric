@@ -9,20 +9,20 @@ import io.github.CoolMineman.NextTickDisplayer;
 
 import org.spongepowered.asm.mixin.injection.At;
 
-import net.notfabricmcatall.example.ExampleMod;
+import net.notfabricmcatall.example.ChromaHudFabric;
 import net.minecraft.client.gui.hud.InGameHud;
 
 @Mixin(InGameHud.class)
-public class ToBeNamedOne {
+public class InGameHudMixin{
     @Inject(method = "render", at = @At(value = "TAIL"))
     public void render(CallbackInfo ci) {
         NextTickDisplayer.tick();
-        ExampleMod.elementrenderer.onRenderTick();
+        ChromaHudFabric.elementrenderer.onRenderTick();
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void tick(CallbackInfo ci) {
         ResolutionUtil.tick();
-        ExampleMod.elementrenderer.tick();
+        ChromaHudFabric.elementrenderer.tick();
     }
 }

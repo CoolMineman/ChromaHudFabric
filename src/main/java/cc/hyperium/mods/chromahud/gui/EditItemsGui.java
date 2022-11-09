@@ -95,7 +95,7 @@ public class EditItemsGui extends Screen {
 
     }
 
-    @Override
+    // @Override
     protected void buttonPressed(ButtonWidget button) {
         Consumer<ButtonWidget> guiButtonConsumer = clicks.get(button);
         if (guiButtonConsumer != null) guiButtonConsumer.accept(button);
@@ -180,7 +180,7 @@ public class EditItemsGui extends Screen {
             }
 
             for (ButtonWidget guiButton : super.buttons) {
-                if (guiButton.isFocused()) return;
+                if (guiButton.isHovered()) return;
             }
 
             modifying = item1;

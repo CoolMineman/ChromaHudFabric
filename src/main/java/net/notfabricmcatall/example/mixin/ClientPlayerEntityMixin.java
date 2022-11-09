@@ -5,15 +5,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.At;
 
-import net.notfabricmcatall.example.ExampleMod;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.notfabricmcatall.example.ChromaHudFabric;
+import net.minecraft.entity.player.ClientPlayerEntity;
 
 @Mixin(ClientPlayerEntity.class)
-public class CommandMixin {
+public class ClientPlayerEntityMixin {
     @Inject(at = @At("HEAD"), method = "sendChatMessage", cancellable = true)
 	private void sendChatMessage(String string, CallbackInfo info) {
 		if ("/chromahud".equals(string)) {
-            ExampleMod.chromahud.commandchromahud.onExecute();
+            ChromaHudFabric.chromahud.commandchromahud.onExecute();
             info.cancel();
         }
 	}

@@ -4,7 +4,7 @@ import cc.hyperium.mods.chromahud.ChromaHUD;
 import cc.hyperium.mods.chromahud.ElementRenderer;
 import net.fabricmc.api.ModInitializer;
 
-public class ExampleMod implements ModInitializer {
+public class ChromaHudFabric implements ModInitializer {
 	public static ChromaHUD chromahud;
 	public static ElementRenderer elementrenderer;
 

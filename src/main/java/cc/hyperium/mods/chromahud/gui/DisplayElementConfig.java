@@ -272,7 +272,7 @@ public class DisplayElementConfig extends Screen {
 
     }
 
-    @Override
+    // @Override
     protected void buttonPressed(ButtonWidget button) {
         Consumer<ButtonWidget> guiButtonConsumer = clicks.get(button);
         if (guiButtonConsumer != null) guiButtonConsumer.accept(button);

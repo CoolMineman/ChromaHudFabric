@@ -31,8 +31,8 @@ public class GuiButtonExt extends ButtonWidget {
      */
     public void drawButton(MinecraftClient mc, int mouseX, int mouseY) {
         if (visible) {
-            focused = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
-            int k = getYImage(focused);
+            hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
+            int k = getYImage(hovered);
             GuiUtils.drawContinuousTexturedBox(WIDGETS_LOCATION, x, y, 0, 46 + k * 20, width, height,
                 200, 20, 2, 3, 2, 2, zOffset);
             renderBg(mc, mouseX, mouseY);
@@ -40,7 +40,7 @@ public class GuiButtonExt extends ButtonWidget {
 
             if (!active) {
                 color = 10526880;
-            } else if (focused) {
+            } else if (hovered) {
                 color = 16777120;
             }
 
